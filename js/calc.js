@@ -1,8 +1,9 @@
-var table1 =document.getElementById("table1"); 
-var table2 =document.getElementById("table2");
-var table3 =document.getElementById("table3");  
-var bcalc= document.getElementById("bcalc");
-var baddweek= document.getElementById("baddweek");
+
+var table1 = document.getElementById("table1");
+var table2 = document.getElementById("table2");
+var table3 = document.getElementById("table3"); 
+var bcalc = document.getElementById("bcalc");
+var baddweek = document.getElementById("baddweek");
 var row1 = table1.getElementsByTagName("tr")[0];
 var row2 = table2.getElementsByTagName("tr")[1];
 var row3 = table3.getElementsByTagName("tr")[2];
@@ -10,18 +11,18 @@ var cell = row1.getElementsByTagName("td")[1];
 var sel = cell.getElementsByTagName("select")[0];
 var tex = cell.getElementsByTagName("input")[0];
 var bar;
-var per=document.getElementById("per");
-var circle =document.getElementById("circle");
-var week=0;
-var empty=0;
-var notNum=0;
-var total=0;
+var per = document.getElementById("per");
+var circle = document.getElementById("circle");
+var week = 0;
+var empty = 0;
+var notNum = 0;
+var total = 0;
 var percent;
 var i, j;
-var weekmiss=0;
-var allmisss= new Array();
-var weeknum,weekdate,weekper;
-var trig=0;
+var weekmiss = 0;
+var allmisss = new Array();
+var weeknum , weekdate , weekper,lastweekdate;
+var trig = 0;
 /*e1sel.onchange=function(){
     if (e1sel.value==="+"){
         e1tex.readOnly = false;
@@ -30,10 +31,10 @@ var trig=0;
         e1tex.readOnly = true;
     }
 };*/
-bcalc.onclick=function()
+bcalc.onclick = function()
 	{
-        empty=0;
-        notNum=0;
+        empty = 0;
+        notNum = 0;
         total=0;
 	    for (i=1 ; i<=5 ;i++)
 	   		{
@@ -96,7 +97,8 @@ baddweek.onclick=function()
 		if(totalrows<=1){weeknum.innerHTML=1;}
 		else{var lastweeknum=lastrow.getElementsByTagName("td")[0];weeknum.innerHTML=1+parseInt(lastweeknum.innerHTML);}
 		weekper.innerHTML=parseInt(percent)+"%";
-		weekdate.innerHTML="10/10/2010";
+		lastweekdate=lastrow.getElementsByTagName("td")[2];
+		modifyDate();
 
 		/* ---- table 3 editing ---- */
 		var rows=table3.getElementsByTagName("tr");
@@ -107,6 +109,8 @@ baddweek.onclick=function()
 		row3=table3.insertRow();
 		weeknum=row3.insertCell(0);
 		weekdate=row3.insertCell(1);
+		lastweekdate=lastrow.getElementsByTagName("td")[1];
+		modifyDate();
 		if(totalrows<=2)
 			{
 				weeknum.innerHTML=1;
@@ -127,8 +131,28 @@ baddweek.onclick=function()
 								pray.innerHTML=allmisss[i]+lastweekmiss[i];
 							}
 			}
-		weekdate.innerHTML="10/10/2010"; 
+
 		trig=0;
 	}
 	else{alert("calculate first")}	
+		
 	};
+function modifyDate(){
+var takein=lastweekdate.innerHTML;
+takein=takein.split("/");
+console.log(takein);
+var year=Number(takein[0]);
+var mon=Number(takein[1]);
+var day=Number(takein[2]);
+var anydate = new Date(year, mon, 0);
+var maxdays=anydate.getDate();
+var maxmonths=12;
+var nextyear;
+var nextmon;
+var nextday;
+if(day+7>maxdays){nextmon=mon+1;nextday=(day+7)-maxdays;}
+else{nextmon=mon;nextday=(day+7);}
+if(nextmon>maxmonths){nextyear=year+1;nextmon=1;}
+else{nextyear=year;}
+weekdate.innerHTML= nextyear+"/"+nextmon+"/"+nextday;
+}
